@@ -12,16 +12,28 @@ const index =(req, res) =>{
 }
 
 //show
-const show = (req, res) =>{    
+const show = (req, res) =>{
+    const sql=  `SELECT * FROM posts WHERE id = ?`
+    const id = req.params.id
 
-    const post = blogs.find((elm) => elm.id == req.params.id)
-    if(!post){
-        res.status(400).json({
-            error:'Not Found',
-            message:'non trovato'
+    connection.query(sql, [id], (err, results) => {
+        if (err){
+            return res.status(500).json({ 
+                error: 'Database query failed' 
+            });
+        } 
+
+        const post = results[0]
+
+        if(!post){
+                res.status(400).json({
+                    error:'Not Found',
+                    message:'non trovato'
+                });
+            }
+
+        res.json(post);
         });
-    }
-    res.json(post)
 }
 
 //store
