@@ -91,18 +91,32 @@ const modify = (req, res) =>{
 
 //destroy
 const destroy =(req, res) =>{
-    const post = blogs.find((elm) => elm.id == req.params.id);
+    // const post = blogs.find((elm) => elm.id == req.params.id);
 
-    if(!post) {
-        return res.status(400).json({
-            error:'Not Found',
-            message:'non trovato'
+    // if(!post) {
+    //     return res.status(400).json({
+    //         error:'Not Found',
+    //         message:'non trovato'
+    //     });
+    // }
+
+    // blogs.splice(blogs.indexOf(post) , 1);
+    // console.log(blogs)
+
+    // res.sendStatus(204)
+
+    const sql = `DELETE FROM posts WHERE id = ?`
+    const id = req.params.id
+
+    connection.query(sql, [id], (err, results) => {
+        if (err){
+            return res.status(500).json({ 
+                error: 'Database query failed' 
+            });
+        } 
+
+        res.sendStatus(204)
+
         });
-    }
-
-    blogs.splice(blogs.indexOf(post) , 1);
-    console.log(blogs)
-
-    res.sendStatus(204)
 }
 module.exports = {index, show, create, update, modify, destroy }
