@@ -1,0 +1,24 @@
+{
+  "name": "express-blog-sql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js",
+    "watch": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lisadelladucata/express-blog-sql.git"
+  },
+  "author": "Lisa Della Ducata",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lisadelladucata/express-blog-sql/issues"
+  },
+  "homepage": "https://github.com/lisadelladucata/express-blog-sql#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mysql2": "^3.12.0"
+  }
+}
