@@ -13,10 +13,16 @@ const index =(req, res) =>{
 
 //show
 const show = (req, res) =>{
-    const sql=  `SELECT * FROM posts WHERE id = ?`
+    const postSql=  `SELECT * FROM posts WHERE id = ?`
+    const tagsSql= `
+    SELECT tags.id, tags.label
+    FROM tags
+    JOIN post_tag ON post_tag.tag_id = tags.id
+    WHERE post_tag.post_id=?
+    `
     const id = req.params.id
 
-    connection.query(sql, [id], (err, results) => {
+    connection.query(postSql, [id], (err, results) => {
         if (err){
             return res.status(500).json({ 
                 error: 'Database query failed' 
@@ -31,9 +37,18 @@ const show = (req, res) =>{
                     message:'non trovato'
                 });
             }
-
-        res.json(post);
-        });
+            connection.query(postSql, [id], (err, results) => {
+                if (err){
+                    return res.status(500).json({ 
+                        error: 'Database query failed' 
+                    });
+                } 
+        
+                post.tags=results
+                
+                res.json(post);
+            });
+    });
 }
 
 //store
@@ -91,20 +106,6 @@ const modify = (req, res) =>{
 
 //destroy
 const destroy =(req, res) =>{
-    // const post = blogs.find((elm) => elm.id == req.params.id);
-
-    // if(!post) {
-    //     return res.status(400).json({
-    //         error:'Not Found',
-    //         message:'non trovato'
-    //     });
-    // }
-
-    // blogs.splice(blogs.indexOf(post) , 1);
-    // console.log(blogs)
-
-    // res.sendStatus(204)
-
     const sql = `DELETE FROM posts WHERE id = ?`
     const id = req.params.id
 
